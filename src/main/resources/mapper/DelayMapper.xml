@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sicau.dao.DelayMapper">
+  <resultMap id="BaseResultMap" type="com.sicau.entity.dto.Delay">
+  <id column="delay_id" jdbcType="VARCHAR" property="delayId" />
+  <result column="delay_time" jdbcType="VARCHAR" property="delayTime" />
+  <result column="state" jdbcType="VARCHAR" property="state" />
+</resultMap>
+  <resultMap id="ResultMapWithTeam" type="com.sicau.entity.pojo.po.DelayPO">
+    <id column="delay_id" jdbcType="VARCHAR" property="delayId" />
+    <result column="delay_time" jdbcType="VARCHAR" property="delayTime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="team_id" jdbcType="VARCHAR" property="teamId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    delay_id, delay_time, state
+  </sql>
+  <select id="selectByExample" parameterType="com.sicau.entity.pojo.po.DelayExamplePO" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from delay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from delay
+    where delay_id = #{delayId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from delay
+    where delay_id = #{delayId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sicau.entity.pojo.po.DelayExamplePO">
+    delete from delay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sicau.entity.dto.Delay">
+    insert into delay (delay_id, delay_time, state
+      )
+    values (#{delayId,jdbcType=VARCHAR}, #{delayTime,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sicau.entity.dto.Delay">
+    insert into delay
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="delayId != null">
+        delay_id,
+      </if>
+      <if test="delayTime != null">
+        delay_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="delayId != null">
+        #{delayId,jdbcType=VARCHAR},
+      </if>
+      <if test="delayTime != null">
+        #{delayTime,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertRunAndDelay">
+    insert into runAndDelay(run_id,delay_id) values(#{param1},#{param2})
+  </insert>
+  <select id="countByExample" parameterType="com.sicau.entity.pojo.po.DelayExamplePO" resultType="java.lang.Long">
+    select count(*) from delay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update delay
+    <set>
+      <if test="record.delayId != null">
+        delay_id = #{record.delayId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delayTime != null">
+        delay_time = #{record.delayTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update delay
+    set delay_id = #{record.delayId,jdbcType=VARCHAR},
+      delay_time = #{record.delayTime,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sicau.entity.dto.Delay">
+    update delay
+    <set>
+      <if test="delayTime != null">
+        delay_time = #{delayTime,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where delay_id = #{delayId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sicau.entity.dto.Delay">
+    update delay
+    set delay_time = #{delayTime,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR}
+    where delay_id = #{delayId,jdbcType=VARCHAR}
+  </update>
+  <!--获得所有的延时申请单-->
+  <select id="getState" resultType="java.lang.String">
+        select state from examineState where id = (select state from delay where delay_id=#{delayId})
+</select>
+  <select id="getAllDelay" resultType="com.sicau.entity.dto.Delay">
+    select * from delay;
+  </select>
+  <select id="getAllDelayWithTeam" resultType="com.sicau.entity.pojo.po.DelayPO">
+    select d.delay_id,a.delay_time,d.state,u.team_id from delay d ,undertake u ,runAndDelay r,run_project a where
+    d.delay_id=r.delay_id and a.run_id=r.run_id and a.undertake_id=u.undertake_id
+
+  </select>
+</mapper>

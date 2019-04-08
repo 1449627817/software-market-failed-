@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sicau.dao.AchievementsAndTypeMapper">
+    <resultMap id="AchievementType" type="com.sicau.entity.dto.AchievementsType" >
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </resultMap>
+    <resultMap id="AchievementAndType" type="com.sicau.entity.dto.AchievementsAndType" >
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="achievement_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="type_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </resultMap>
+    <sql id="AchievementType_List">
+        id,name
+    </sql>
+    <insert id="insertType" parameterType="AchievementsType">
+        insert into softwareshop.achievements_type
+        (id, name) values (#{id},#{name})
+    </insert>
+    <insert id="insertAchievementAndType" parameterType="AchievementsAndType">
+        insert into softwareshop.achievementsAndType
+        (id, achievements_id, type_id) values (#{id},#{achievementsId},#{typeId})
+    </insert>
+    <select id="selectByName"  resultType="string">
+        select id
+        from softwareshop.achievements_type
+        where name=#{achievementType}
+    </select>
+</mapper>

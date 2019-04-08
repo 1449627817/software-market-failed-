@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sicau.dao.RunProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.sicau.entity.dto.RunProject" >
+    <result column="run_id" property="runId" jdbcType="VARCHAR" />
+    <result column="time_node" property="timeNode" jdbcType="VARCHAR" />
+    <result column="delay_time" property="delayTime" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="overtime" property="overtime" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="VARCHAR" />
+    <result column="progress" property="progress" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.sicau.entity.dto.RunProject" >
+    insert into run_project (run_id, time_node, delay_time, 
+      start_time,overtime,score, progress,undertake_id)
+    values (#{runId,jdbcType=VARCHAR}, #{timeNode,jdbcType=VARCHAR}, #{delayTime,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=VARCHAR}, #{overtime,jdbcType=VARCHAR},
+      #{score,jdbcType=VARCHAR}, #{progress,jdbcType=VARCHAR},#{undertakeId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sicau.entity.dto.RunProject" >
+    insert into run_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="runId != null" >
+        run_id,
+      </if>
+      <if test="timeNode != null" >
+        time_node,
+      </if>
+      <if test="delayTime != null" >
+        delay_time,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="getTime != null" >
+        get_time,
+      </if>
+      <if test="overtime != null" >
+        overtime,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="progress != null" >
+        progress,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="runId != null" >
+        #{runId,jdbcType=VARCHAR},
+      </if>
+      <if test="timeNode != null" >
+        #{timeNode,jdbcType=VARCHAR},
+      </if>
+      <if test="delayTime != null" >
+        #{delayTime,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="getTime != null" >
+        #{getTime,jdbcType=VARCHAR},
+      </if>
+      <if test="overtime != null" >
+        #{overtime,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="progress != null" >
+        #{progress,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="addTimeNode">
+    update run_project set time_node = #{timeNode} where run_id = #{runId}
+  </insert>
+  <insert id="addRunProject">
+    insert into run_project(run_id,time_node,delay_time,start_time,overtime,score,progress) VALUE (#{runId},#{timeNode},#{delayTime},#{startTime},#{overtime},#{score},#{progress})
+  </insert>
+  <update id="updateScore">
+    update run_project set score=#{score} where run_id = #{runId}
+  </update>
+  <update id="updateProgress">
+    update run_project set progress=#{progress} where run_id = #{runId}
+  </update>
+  <select id="selectProgress" resultType="java.lang.String">
+    SELECT progress FROM run_project WHERE run_id=#{runId}
+  </select>
+  <select id="selectByRunId" resultType="com.sicau.entity.dto.RunProject">
+      SELECT * from run_project WHERE run_id=#{runId}
+    </select>
+    <select id="selectOverTime" resultType="java.lang.String">
+      select overtime from run_project where run_id=#{runId}
+    </select>
+  <select id="selectTeamIdByRunIdWithUnderTake" resultType="java.lang.String">
+    select team_id from undertake u left join run_project r on r.undertake_id=u.undertake_id
+    where r.run_id=#{runId}
+  </select>
+  <select id="selectUndertakeIdByRunId" resultType="java.lang.String">
+    select undertake_id from run_project where run_id=#{runId}
+  </select>
+    <select id="selectTimeNode" resultType="java.lang.String">
+      SELECT time_node from run_project where run_id=#{runId}
+    </select>
+
+
+</mapper>

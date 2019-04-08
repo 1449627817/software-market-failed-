@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--第一步：直接配置一个 securityManager -->
+    <bean id="myRealm" class="com.sicau.shiro.MyRealm">
+        <!--<property name="credentialsMatcher">-->
+        <!--<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">-->
+        <!--&lt;!&ndash;指定加密算法&ndash;&gt;-->
+        <!--<property name="hashAlgorithmName" value="MD5"/>-->
+        <!--&lt;!&ndash;指定对密码连续进行5轮md5加密&ndash;&gt;-->
+        <!--<property name="hashIterations" value="5"/>-->
+        <!--</bean>-->
+        <!--</property>-->
+    </bean>
+    <!--非web环境使用DefaultSecurityManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--多realm的授权策略设置，配置为必须满足全部realm才算成功，不在realms前配置的话authenticator中的realms集合为空-->
+        <!--securityManager注入realms的时候，会把realm也放一份到authenticator中，所以必须写在realms上面!!!-->
+        <property name="authenticator">
+            <bean class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+                <property name="authenticationStrategy">
+                    <bean class="org.apache.shiro.authc.pam.AllSuccessfulStrategy"/>
+                </property>
+            </bean>
+        </property>
+        <!--如果只有一个realm的话，可以直接注入realm属性，不需要注入realms属性-->
+        <property name="realm" ref="myRealm"></property>
+    </bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+    <!-- 第三步：把请求路径拦截之后的处理 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!--shiro整个的处理，都由securityManger指定和决定 -->
+        <property name="securityManager" ref="securityManager" />
+        <!-- loginUrl==>如果登录成功，跳转到哪个页面，或者执行哪个请求 -->
+        <property name="loginUrl" value="/index.jsp" />
+        <!-- 验证通过执行的请求或者跳转 -->
+        <property name="successUrl" value="/home.jsp" />
+        <!-- 验证不通过执行的请求或者跳转 -->
+        <property name="unauthorizedUrl" value="/failed.jsp" />
+        <!-- 具体的拦截路径和拦截的方式和角色和权限的范围 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!--匿名访问，/api/login是登陆接口，当然可以随便访问-->
+                index = anon
+                /success = authc
+                /** = anon
+            </value>
+        </property>
+    </bean>
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <!--默认自动检查session过期，删除过期session-->
+        <property name="globalSessionTimeout" value="1800000"/>
+        <property name="sessionValidationInterval" value="1800000"/>
+        <!--默认MemorySessionDao-->
+        <!--<property name="sessionDAO">-->
+        <!--&lt;!&ndash;默认使用javaUuidGenerator&ndash;&gt;-->
+        <!--<bean class="com.qunar.lfz.shiro.MyRedisSessionDao"/>-->
+        <!--</property>-->
+        <property name="sessionIdCookie">
+            <bean class="org.apache.shiro.web.servlet.SimpleCookie">
+                <constructor-arg value="shiroCookie"/>
+            </bean>
+        </property>
+        <!--避免url中出现jsessionid-->
+        <property name="sessionIdUrlRewritingEnabled" value="false"/>
+        <!--默认使用ExecutorServiceSessionValidationScheduler，AbstractValidatingSessionManager:209-->
+    </bean>
+</beans>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sicau.dao.PublishMapper">
+
+    <select id="selectTeamByDirection" parameterType="String" resultType="com.sicau.entity.dto.Team">
+        select team_id as teamId , team_name as teamName ,direction , description ,create_time as createTime,
+        team_state as teamState , team_score as teamScore ,number
+        from team where direction = #{v};
+    </select>
+    
+    <select id="selectTeamAndUserById" parameterType="String" resultType="TeamAndUser">
+        select captain ,member from teamAndUser where team_id = #{v};
+    </select>
+    
+    <select id="selectUserById" parameterType="String" resultType="User">
+        select * from user where user_id = #{v};
+    </select>
+
+    <select id="selectTeamByState" parameterType="String" resultType="com.sicau.entity.dto.Team">
+        select team_id as teamId , team_name as teamName ,direction , description ,create_time as createTime,
+        team_state as teamState , team_score as teamScore ,number
+        from team where team_state = #{v};
+    </select>
+
+    <select id="selectAllTeam" resultType="com.sicau.entity.dto.Team">
+        select team_id as teamId , team_name as teamName ,direction , description ,create_time as createTime,
+        team_state as teamState , team_score as teamScore ,number
+        from team ;
+    </select>
+
+    <select id="selectTeamByTeamId" parameterType="String" resultType="com.sicau.entity.dto.Team">
+        select team_id as teamId , team_name as teamName ,direction , description ,create_time as createTime,
+        team_state as teamState , team_score as teamScore ,number
+        from team where team_id = #{v};
+    </select>
+
+    <!--<select id="selectAllProject" resultType="com.sicau.entity.dto.Project">-->
+        <!--select project_id as projectId ,project_time as projectTime ,project_name as projectName,-->
+        <!--project_requirement as projectRequirement ,project_describe as projectDescribe ,project_price as projectPrice,-->
+        <!--user_id as userId ,release_time as releaseTime,state-->
+        <!--from project;-->
+    <!--</select>-->
+
+    <select id="selectAllProject" resultType="com.sicau.entity.dto.Project">
+        select * from project;
+    </select>
+
+    <select id="selectProjectById" parameterType="String" resultType="com.sicau.entity.dto.Project">
+        select project_id as projectId ,project_time as projectTime ,project_name as projectName,
+        project_requirement as projectRequirement ,project_describe as projectDescribe ,project_price as projectPrice,
+        user_id as userId ,release_time as releaseTime,state
+        from project where project_id = #{v};
+    </select>
+
+    <select id="selectUndertakeByProjectIdState2" parameterType="String" resultType="com.sicau.entity.dto.Undertake">
+        select undertake_id as undertakeId ,team_id as teamId ,project_id as projectId,state,
+        functionList,timeNode,time
+        from undertake where project_id = #{v} and state = 2
+    </select>
+
+    <select id="selectUndertakeByProjectIdState1" resultType="com.sicau.entity.dto.Undertake">
+        select undertake_id as undertakeId ,team_id as teamId ,project_id as projectId,state,
+        functionList,timeNode,time
+        from undertake where  state = 1
+    </select>
+
+    <select id="selectWorksByTeamId" parameterType="String" resultType="String">
+        select project_id from works where team_id=#{v}
+    </select>
+
+    <select id="selectProjectByState" parameterType="String" resultType="com.sicau.entity.dto.Project">
+        select project_id as projectId ,project_time as projectTime ,project_name as projectName,
+        project_requirement as projectRequirement ,project_describe as projectDescribe ,project_price as projectPrice,
+        user_id as userId ,release_time as releaseTime,state
+        from project where state = #{v};
+    </select>
+
+</mapper>

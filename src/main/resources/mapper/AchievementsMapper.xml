@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sicau.dao.AchievementsMapper">
+    <resultMap id="RunAndAchievement" type="com.sicau.entity.dto.RunAndAchievements" >
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="run_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="achievements_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </resultMap>
+    <resultMap id="Achievements" type="com.sicau.entity.dto.Achievements" >
+        <id column="achievements_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="time_node" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="achievements_content" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="state" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="commit_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </resultMap>
+    <insert id="insert" parameterType="com.sicau.entity.dto.Achievements">
+        insert into softwareshop.achievements (achievements_id, time_node, achievement_content, state, commit_time)
+        values (#{achievementId},#{timeNode},#{achievementContent},#{state},#{commitTime})
+    </insert>
+    <select id="selectRunAndAchieveByRunId" resultType="java.lang.String">
+        select achievements_id from softwareshop.runAndAchievements where run_id=#{runId}
+    </select>
+    <select id="selectByRunIdAndNode" resultType="com.sicau.entity.dto.Achievements">
+        select * from achievements where achievements_id = #{achievementsId} and time_node = #{node}
+    </select>
+    <select id="selectAchievementContent" resultType="java.lang.String" parameterType="java.lang.String">
+        select achievement_content from achievements where achievements_id in
+        <foreach collection="achievementIdList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and time_node=#{timeNode}
+    </select>
+</mapper>

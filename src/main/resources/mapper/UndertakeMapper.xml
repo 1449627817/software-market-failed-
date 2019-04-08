@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sicau.dao.UndertakeMapper" >
+  <resultMap id="BaseResultMap" type="com.sicau.entity.dto.Undertake" >
+    <result column="undertake_id" property="undertakeId" jdbcType="VARCHAR" />
+    <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.sicau.entity.dto.Undertake" >
+    insert into undertake (undertake_id, team_id, project_id, 
+      state)
+    values (#{undertakeId,jdbcType=VARCHAR}, #{teamId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, 
+      #{state,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sicau.entity.dto.Undertake" >
+    insert into undertake
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="undertakeId != null" >
+        undertake_id,
+      </if>
+      <if test="teamId != null" >
+        team_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="undertakeId != null" >
+        #{undertakeId,jdbcType=VARCHAR},
+      </if>
+      <if test="teamId != null" >
+        #{teamId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <insert id="insertUndertake">
+      insert into undertake (team_id, project_id, state,functionList,timeNode,time)
+      values (#{undertake.teamId}, #{undertake.projectId}, #{undertake.state}, #{undertake.functionList}, #{undertake.timeNode}, #{undertake.time})
+    </insert>
+    <delete id="deletByProjectId">
+      DELETE FROM undertake WHERE project_id = #{projectId}
+    </delete>
+    <select id="getUndertake" resultMap="BaseResultMap">
+    select * from undertake where undertake_id =#{runId}
+  </select>
+
+  <update id="updateUndertakeTeam">
+        update undertake set state = #{state} where undertake_id = #{undertakeId}
+    </update>
+
+  <select id="selectUndertakeById" resultType="com.sicau.entity.dto.Undertake">
+         select * from undertake where undertake_id = #{undertakeId}
+    </select>
+
+  <select id="selectTeamState" resultMap="teamClassMap">
+    select cs.team_id,cs.team_name,cs.direction,cs.description,cs.create_time,cs.team_state,cs.team_score,cs.number,c.undertake_id,c.functionList,c.timeNode,c.time from undertake c left join team cs on c.team_id = cs.team_id
+         where c.state = #{state} and c.team_id = #{teamId} and c.project_id = #{projectId}
+    </select>
+    <select id="selectProjectIdByState" resultType="java.lang.String">
+      select project_id from undertake WHERE state = #{state} GROUP BY project_id
+    </select>
+  <select id="selectTeamIdByProjectId" resultType="java.lang.String">
+    select team_id from undertake WHERE project_id = #{projectId} and state = #{state}
+  </select>
+  <select id="selectUndertakeByTeamId" resultType="java.lang.Integer">
+    select undertake_id from undertake where team_id = #{teamId}
+  </select>
+    <select id="selectUndertakeId" resultType="java.lang.Integer">
+      select mix(undertake_id) from undertake
+    </select>
+  <select id="selectFunctionList" resultType="java.lang.String">
+     select functionList from undertake where project_id=#{projectId} and team_id=#{teamId}
+  </select>
+    <resultMap id="teamClassMap" type="com.sicau.entity.pojo.po.TeamUndertakePO">
+    <id column="team_id" jdbcType="VARCHAR" property="teamId" />
+    <result column="team_name" jdbcType="VARCHAR" property="teamName" />
+    <result column="direction" jdbcType="VARCHAR" property="direction" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="team_state" jdbcType="VARCHAR" property="teamState" />
+    <result column="team_score" jdbcType="VARCHAR" property="teamScore" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="undertake_id" jdbcType="VARCHAR" property="undertakeId" />
+    <result column="functionList" jdbcType="VARCHAR" property="functionList" />
+    <result column="timeNode" jdbcType="VARCHAR" property="timeNode" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+  </resultMap>
+</mapper>

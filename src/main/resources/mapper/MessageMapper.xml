@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sicau.dao.MessageMapper">
+    <update id="updateState">
+        update message set state=2 where message_id=#{messageId}
+    </update>
+    <select id="selectContentById" resultType="string">
+        select content from message where message_id=#{messageId}
+    </select>
+    <select id="selectUserSendById" resultType="java.lang.String">
+        select user_send from messageAndUser where message_id=#{messageId}
+    </select>
+    <select id="selectMessageIdByUserGet" resultType="java.lang.String">
+        select message_id from messageAndUser where user_get=#{userGet}
+    </select>
+    <select id="selectById" resultType="com.sicau.entity.dto.Message">
+        select * from message where message_id=#{messageId}
+    </select>
+    <select id="selectAllMessage" resultType="com.sicau.entity.dto.Message">
+        select * from message
+    </select>
+    <select id="selectMessagePO" resultType="com.sicau.entity.pojo.po.MessagePo">
+       select m.message_id,c.state,m.create_time,m.topic,
+u.user_send ,m.content,u.user_get  from message m,messageAndUser u,checkState c
+where m.message_id=u.message_id and m.state=c.id
+</select>
+    <select id="selectMessagePoById" resultType="com.sicau.entity.pojo.po.MessagePo">
+         select m.message_id,c.state,m.create_time,m.topic,
+u.user_send ,m.content,u.user_get  from message m,messageAndUser u,checkState c
+where m.message_id=#{messageId}and m.message_id=u.message_id and m.state=c.id
+    </select>
+    <select id="selectMessagePOByUserGet" resultType="com.sicau.entity.pojo.po.MessagePo">
+        select m.message_id,c.state,m.create_time,m.topic,
+u.user_send ,m.content,u.user_get  from message m,messageAndUser u,checkState c
+where u.user_get=#{userGet}and m.message_id=u.message_id and m.state=c.id
+    </select>
+</mapper>

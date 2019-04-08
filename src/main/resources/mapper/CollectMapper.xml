@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sicau.dao.CollectMapper">
+
+    <insert id="updateProject" parameterType="Project">
+        insert into project(project_id,project_name,project_requirement,project_time,project_describe,project_price)
+        values (#{projectId},#{projectName},#{projectRequirement},#{projectTime},#{projectDescribe},#{projectPrice});
+    </insert>
+
+    <insert id="updateTeam" parameterType="com.sicau.entity.pojo.po.TeamPO">
+        insert into team(team_id,team_name,direction,description,number,create_time)
+        values (#{teamId},#{teamName},#{direction},#{description},#{number},#{createTime})
+    </insert>
+    
+    <select id="selectUserId" parameterType="User" resultType="java.lang.String">
+        select user_id from user where name = #{name} and student_id = #{studentId}
+    </select>
+
+    <insert id="updateTeamAndUser" parameterType="TeamAndUser">
+        insert into teamAndUser(team_id,captain,member)
+        values (#{teamId},#{captain},#{member})
+    </insert>
+
+    <insert id="updateUndertake" parameterType="com.sicau.entity.dto.Undertake">
+        insert into undertake(team_id,project_id,state,functionlist,timeNode)
+        values (#{teamId},#{projectId},#{state},#{functionList},#{timeNode})
+    </insert>
+
+<!--获得所有可供选择团队方向-->
+    <select id="selectAllTeamDirection" parameterType="String" resultType="com.sicau.entity.dto.DirectionName">
+        SELECT * FROM team_direction;
+    </select>
+
+    <select id="selectUserByStudentId" parameterType="String" resultType="com.sicau.entity.dto.User">
+        select * from user where student_id = #{v}
+    </select>
+</mapper>

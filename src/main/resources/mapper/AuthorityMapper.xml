@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sicau.dao.AuthorityMapper" >
+  <resultMap id="BaseResultMap" type="com.sicau.entity.dto.Authority" >
+    <result column="aauthority_id" property="aauthorityId" jdbcType="VARCHAR" />
+    <result column="aauthority_name" property="aauthorityName" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.sicau.entity.dto.Authority" >
+    insert into authority (aauthority_id, aauthority_name)
+    values (#{aauthorityId,jdbcType=VARCHAR}, #{aauthorityName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sicau.entity.dto.Authority" >
+    insert into authority
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aauthorityId != null" >
+        aauthority_id,
+      </if>
+      <if test="aauthorityName != null" >
+        aauthority_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aauthorityId != null" >
+        #{aauthorityId,jdbcType=VARCHAR},
+      </if>
+      <if test="aauthorityName != null" >
+        #{aauthorityName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="getAuthotity" resultMap="BaseResultMap">
+    select * from authority where aauthority_id in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

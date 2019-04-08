@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sicau.dao.MessageTypeMapper">
+    <insert id="insertMessageAndType">
+        insert into messageAndType (message_id, type_id)
+        values (#{messageId}, #{messageTypeId})
+    </insert>
+    <insert id="insertMessageAndUser">
+        insert into messageAndUser (message_id, user_send, user_get)
+        values (#{messageId}, #{userSend},#{userGet})
+    </insert>
+    <insert id="insertMessageType">
+        insert into message_type (id, name) values (#{messageTypeId},#{messageType})
+    </insert>
+    <insert id="insertMessage">
+        insert into message (message_id, state,create_time,content,topic,relation)
+        values (#{messagePO.messageId}, #{messagePO.state}, #{messagePO.createTime}, #{messagePO.content}, #{messagePO.topic},#{messagePO.relation})
+    </insert>
+    <select id="selectMessageTypeById" resultType="com.sicau.entity.dto.MessageType">
+        select * from message_type where id = #{messageType}
+    </select>
+</mapper>
